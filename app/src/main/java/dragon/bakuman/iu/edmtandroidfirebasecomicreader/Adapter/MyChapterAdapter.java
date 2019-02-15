@@ -7,51 +7,51 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import dragon.bakuman.iu.edmtandroidfirebasecomicreader.ChaptersActivity;
 import dragon.bakuman.iu.edmtandroidfirebasecomicreader.Common.Common;
 import dragon.bakuman.iu.edmtandroidfirebasecomicreader.Interface.IRecyclerItemClickListener;
-import dragon.bakuman.iu.edmtandroidfirebasecomicreader.Model.Comic;
+import dragon.bakuman.iu.edmtandroidfirebasecomicreader.Model.Chapter;
 import dragon.bakuman.iu.edmtandroidfirebasecomicreader.R;
+import dragon.bakuman.iu.edmtandroidfirebasecomicreader.ViewComicActivity;
 
-public class MyComicAdapter extends RecyclerView.Adapter<MyComicAdapter.MyViewHolder> {
+public class MyChapterAdapter extends RecyclerView.Adapter<MyChapterAdapter.MyViewHolder> {
 
     Context context;
-    List<Comic> comicList;
+    List<Chapter> chapterList;
     LayoutInflater inflater;
 
-    public MyComicAdapter(Context context, List<Comic> comicList) {
+    public MyChapterAdapter(Context context, List<Chapter> chapterList) {
         this.context = context;
-        this.comicList = comicList;
+        this.chapterList = chapterList;
         inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View itemView = inflater.inflate(R.layout.comic_item, viewGroup, false);
+    public MyChapterAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View itemView = inflater.inflate(R.layout.chapter_item, viewGroup, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyChapterAdapter.MyViewHolder myViewHolder, int i) {
 
-        Picasso.get().load(comicList.get(i).Image).into(myViewHolder.comic_image);
-        myViewHolder.comic_name.setText(comicList.get(i).Name);
+
+        myViewHolder.txt_chapter_numb.setText(chapterList.get(i).Name);
+
         myViewHolder.setRecyclerItemClickListener(new IRecyclerItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                //save comic selected
-                Common.comicSelected = comicList.get(position);
-                context.startActivity(new Intent(context, ChaptersActivity.class));
+                Common.chapterSelected = chapterList.get(position);
+
+                Common.chapterIndex = position;
+
+                context.startActivity(new Intent(context, ViewComicActivity.class));
 
             }
         });
@@ -59,13 +59,12 @@ public class MyComicAdapter extends RecyclerView.Adapter<MyComicAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
-        return comicList.size();
+        return chapterList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView comic_name;
-        ImageView comic_image;
+        TextView txt_chapter_numb;
         IRecyclerItemClickListener recyclerItemClickListener;
 
         public void setRecyclerItemClickListener(IRecyclerItemClickListener recyclerItemClickListener) {
@@ -74,9 +73,7 @@ public class MyComicAdapter extends RecyclerView.Adapter<MyComicAdapter.MyViewHo
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            comic_image = itemView.findViewById(R.id.image_comic);
-            comic_name = itemView.findViewById(R.id.comic_name);
+            txt_chapter_numb = itemView.findViewById(R.id.txt_chapter_numb);
 
             itemView.setOnClickListener(this);
         }
